@@ -19,6 +19,22 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk{
+            moduleName "uninstall" //生成so的名称
+            abiFilters "arm64-v8a", "armeabi-v7a", "x86","x86_64"   //输出制定三种abi体系结构下的so库
+        }
+
+        sourceSets.main {
+            jni.srcDirs = [] //disable automatic ndk-build call
+        }
+    }
+
+    //正常的使用jni的步骤会提示不再支持ndk编译,报错提示会给出Android.mk的位置，请将Android.mk文件copy到jni目录下,然后将下面的externalNativeBuild节点添加到android节点下,path为Android.mk的路径
+    externalNativeBuild{
+        ndkBuild{
+            path "src/main/jni/Android.mk"
+        }
     }
 
     lintOptions {
