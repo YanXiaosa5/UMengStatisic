@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:scrolling_image_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/rl_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -9,10 +11,136 @@
     <TextView
         android:id="@+id/tv_channel"
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="40dp"
         android:textSize="24sp"
         android:textColor="#ffffff"
         android:background="@color/colorAccent"
         android:text="Hello World!" />
 
-</RelativeLayout>
+    <!--近景-->
+    <FrameLayout
+        android:id="@+id/ll_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="3dp"
+            scrolling_image_view:src="@array/random_imgs"
+            scrolling_image_view:randomness="@array/randomness"
+            />
+
+        <ImageView
+            android:layout_gravity="center_horizontal|bottom"
+            android:src="@mipmap/van"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <!--远近景-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="1dp"
+            scrolling_image_view:src="@mipmap/scrolling_background" />
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="1.9dp"
+            scrolling_image_view:src="@mipmap/scrolling_foreground" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:src="@mipmap/van" />
+    </FrameLayout>
+
+    <!--远近景色没有车-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="-1dp"
+            scrolling_image_view:src="@mipmap/scrolling_background" />
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="-1.9dp"
+            scrolling_image_view:src="@mipmap/scrolling_foreground" />
+    </FrameLayout>
+
+    <!--游戏布局奔跑-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:src="@drawable/layer_1"-->
+            <!--android:scaleType="fitXY" />-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:src="@drawable/layer_2" />-->
+
+        <!--<fanhua.com.umengstastics.ex.ScrollingImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--scrolling_image_view:speed=".3dp"-->
+            <!--scrolling_image_view:src="@drawable/layer_3" />-->
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed=".6dp"
+            scrolling_image_view:src="@drawable/layer_4" />
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed=".9dp"
+            scrolling_image_view:src="@drawable/layer_5" />
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="1.5dp"
+            scrolling_image_view:src="@drawable/layer_6" />
+
+        <fanhua.com.umengstastics.ex.ScrollingImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            scrolling_image_view:speed="1.7dp"
+            scrolling_image_view:src="@drawable/layer_7" />
+    </FrameLayout>
+
+</LinearLayout>

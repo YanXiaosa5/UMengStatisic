@@ -17,7 +17,6 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:value="5b979a3b8f4a9d11c40000f5 " android:name="UMENG_APPKEY"></meta-data>
-        <meta-data android:value="umeng_channel" android:name="UMENG_CHANNEL"/>
 
         <activity android:name=".MainActivity">
             <intent-filter>

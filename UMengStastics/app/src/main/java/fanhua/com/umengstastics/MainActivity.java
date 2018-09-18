@@ -1,10 +1,27 @@
 package fanhua.com.umengstastics;
 
+import android.app.Notification;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.Alias;
+import com.umeng.message.entity.UMessage;
+
+import java.util.Map;
 
 
 //下载库:   https://github.com/lingochamp/FileDownloader   下载列表
@@ -42,14 +59,101 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //隐去电池等图标和一切修饰部分（状态栏部分）
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        PushAgent.getInstance(this).onAppStart();
         ((TextView) findViewById(R.id.tv_channel)).setText(LoadJni.listenUnInstall());
+
+        //点击通知(后续行为-->自定义行为有内容时才会调用)
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                System.out.println("接收消息"+new Gson().toJson(msg));
+                /**
+                 * {"a":{"nameValuePairs":{"display_type":"notification","extra":{"nameValuePairs":{"key":"main"}},"msg_id":"uuynd2s153724897629610","body":{"nameValuePairs":{"after_open":"go_custom","play_lights":"false","ticker":"fdgdfgd","play_vibrate":"false","custom":"可怜九月初三夜","text":"dfgdfgdf","title":"fdgdfgd","play_sound":"true"}},"random_min":0}},"activity":"","after_open":"go_custom","alias":"","bar_image":"","builder_id":0,"clickOrDismiss":true,"custom":"可怜九月初三夜","display_type":"notification","expand_image":"","extra":{"key":"main"},"icon":"","img":"","isAction":false,"largeIcon":"","message_id":"f__-mhTSIjWrRVwu\u0026\u0026uuynd2s153724897629610\u0026\u0026V4YV22awBi8DAHu6HFer7Pvn\u0026\u002601\u0026\u0026","msg_id":"uuynd2s153724897629610","play_lights":false,"play_sound":true,"play_vibrate":false,"pulledWho":"","pulled_package":"","pulled_service":"","random_min":0,"recall":"","screen_on":false,"sound":"","text":"dfgdfgdf","ticker":"fdgdfgd","title":"fdgdfgd","url":""}
+                 */
+            }
+        };
+        UmengApplication.mPushAgent.setNotificationClickHandler(notificationClickHandler);
+
+        //自定义通知栏
+        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+
+            @Override
+            public void dealWithCustomMessage(final Context context, final UMessage msg) {
+                //处理自定义消息
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 对于自定义消息，PushSDK默认只统计送达。若开发者需要统计点击和忽略，则需手动调用统计方法。
+                        boolean isClickOrDismissed = true;
+                        if(isClickOrDismissed) {
+                            //自定义消息的点击统计
+                            UTrack.getInstance(getApplicationContext()).trackMsgClick(msg);
+                        } else {
+                            //自定义消息的忽略统计
+                            UTrack.getInstance(getApplicationContext()).trackMsgDismissed(msg);
+                        }
+                        Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public Notification getNotification(Context context, UMessage msg) {//处理普通通知
+
+                Notification.Builder builder = new Notification.Builder(context);
+                RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
+                        R.layout.self_notification_layout);
+                myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+                myNotificationView.setTextViewText(R.id.notification_text, msg.text);
+
+                myNotificationView.setImageViewBitmap(R.id.notification_large_icon,
+                        getLargeIcon(context, msg));
+                myNotificationView.setImageViewResource(R.id.notification_small_icon,
+                        getSmallIconId(context, msg));
+
+                builder.setContent(myNotificationView)
+                        .setSmallIcon(getSmallIconId(context, msg))
+                        .setTicker(msg.ticker)
+                        .setAutoCancel(true);
+                return builder.getNotification();
+
+//                switch (msg.builder_id) {
+//                    case 1:
+//                        Notification.Builder builder = new Notification.Builder(context);
+//                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
+//                                R.layout.self_notification_layout);
+//                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+//                        myNotificationView.setTextViewText(R.id.notification_text, msg.text);
+//
+//                        myNotificationView.setImageViewBitmap(R.id.notification_large_icon,
+//                                getLargeIcon(context, msg));
+//                        myNotificationView.setImageViewResource(R.id.notification_small_icon,
+//                                getSmallIconId(context, msg));
+//
+//                        builder.setContent(myNotificationView)
+//                                .setSmallIcon(getSmallIconId(context, msg))
+//                                .setTicker(msg.ticker)
+//                                .setAutoCancel(true);
+//                        return builder.getNotification();
+//                    default:
+//                        //默认为0，若填写的builder_id并不存在，也使用默认。
+//                        return super.getNotification(context, msg);
+//                }
+            }
+        };
+        UmengApplication.mPushAgent.setMessageHandler(messageHandler);
+
     }
 
     public void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     public void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);

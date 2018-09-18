@@ -29,9 +29,8 @@ public class AppsReceiver extends BroadcastReceiver {
         else if(Intent.ACTION_PACKAGE_REPLACED.equals(action)){
             Toast.makeText(context, uri + "被更新了", Toast.LENGTH_LONG).show();
             System.out.println("更新的uri:"+uri);
-        }
-        else{
-
+        } else{
+            System.out.println("没有操作");
         }
 
     }
