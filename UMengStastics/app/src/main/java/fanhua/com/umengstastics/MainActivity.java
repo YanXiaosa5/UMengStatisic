@@ -2,12 +2,11 @@ package fanhua.com.umengstastics;
 
 import android.app.Notification;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +17,9 @@ import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
-import com.umeng.message.entity.Alias;
 import com.umeng.message.entity.UMessage;
 
-import java.util.Map;
+import fanhua.com.umengstastics.dowload.DowloadActivity;
 
 
 //下载库:   https://github.com/lingochamp/FileDownloader   下载列表
@@ -59,12 +57,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //隐去电池等图标和一切修饰部分（状态栏部分）
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        //隐去电池等图标和一切修饰部分（状态栏部分）
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
         PushAgent.getInstance(this).onAppStart();
         ((TextView) findViewById(R.id.tv_channel)).setText(LoadJni.listenUnInstall());
+        ((TextView) findViewById(R.id.tv_channel)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,DowloadActivity.class));
+            }
+        });
 
         //点击通知(后续行为-->自定义行为有内容时才会调用)
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
@@ -158,4 +163,5 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
 }

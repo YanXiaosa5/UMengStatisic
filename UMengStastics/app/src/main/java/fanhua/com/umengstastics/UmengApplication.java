@@ -2,6 +2,7 @@ package fanhua.com.umengstastics;
 
 import android.app.Application;
 
+import com.liulishuo.filedownloader.FileDownloader;
 import com.meituan.android.walle.ChannelInfo;
 import com.meituan.android.walle.WalleChannelReader;
 import com.umeng.commonsdk.UMConfigure;
@@ -33,6 +34,8 @@ public class UmengApplication extends Application {
         }
         UMConfigure.setLogEnabled(true);
         UMConfigure.init(this, "5b979a3b8f4a9d11c40000f5", CHANEEL_ID, UMConfigure.DEVICE_TYPE_PHONE, "67b79016585e0aad7a2590f3fee9f761");
+
+        //umeng推送配置
         mPushAgent = PushAgent.getInstance(this);
 
         //应用在前台时是否显示通知  此方法请在mPushAgent.register方法之前调用。
@@ -51,5 +54,7 @@ public class UmengApplication extends Application {
                 System.out.println("umeng‘推送"+s+"==="+s1);
             }
         });
+
+        FileDownloader.init(this);
     }
 }

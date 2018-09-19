@@ -20,9 +20,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        ndk{
+        ndk {
             moduleName "uninstall" //生成so的名称
-            abiFilters "arm64-v8a", "armeabi-v7a", "x86","x86_64"   //输出制定三种abi体系结构下的so库
+            abiFilters "arm64-v8a", "armeabi-v7a", "x86", "x86_64"   //输出制定三种abi体系结构下的so库
         }
 
         sourceSets.main {
@@ -31,8 +31,8 @@ android {
     }
 
     //正常的使用jni的步骤会提示不再支持ndk编译,报错提示会给出Android.mk的位置，请将Android.mk文件copy到jni目录下,然后将下面的externalNativeBuild节点添加到android节点下,path为Android.mk的路径
-    externalNativeBuild{
-        ndkBuild{
+    externalNativeBuild {
+        ndkBuild {
             path "src/main/jni/Android.mk"
         }
     }
@@ -64,16 +64,16 @@ android {
             signingConfig signingConfigs.yanxiaosa
         }
 
-        release{
+        release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
 
-    productFlavors{
-        productFlavors.all{
-            flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME:name]
+    productFlavors {
+        productFlavors.all {
+            flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME: name]
         }
     }
 
@@ -87,27 +87,27 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     implementation 'com.meituan.android.walle:library:1.1.6'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-
     implementation 'com.umeng.sdk:common:latest.integration'
     implementation 'com.umeng.sdk:common:latest.integration'
     implementation 'com.umeng.sdk:analytics:latest.integration'
-//    implementation 'com.umeng.sdk:common:1.5.0'
+    //    implementation 'com.umeng.sdk:common:1.5.0'
     implementation 'com.umeng.sdk:analytics:7.5.0'
     implementation 'com.liulishuo.filedownloader:library:1.7.5'
-
     //PushSDK必须依赖基础组件库，所以需要加入对应依赖
     implementation 'com.umeng.sdk:common:1.5.3'
     //PushSDK必须依赖utdid库，所以需要加入对应依赖
     implementation 'com.umeng.sdk:utdid:1.1.5.3'
     //PushSDK
     implementation 'com.umeng.sdk:push:4.2.0'
-
-//    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '8.5.23'
+    //多文件下载
+    implementation 'com.liulishuo.filedownloader:library:1.7.5'
+    //    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '8.5.23'
+    implementation 'com.android.support:design:28.0.0-rc02'
 }
