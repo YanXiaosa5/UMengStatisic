@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 //        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        Toast.makeText(this, UmengApplication.CHANEEL_ID+"渠道ID", Toast.LENGTH_SHORT).show();
+
         PushAgent.getInstance(this).onAppStart();
         ((TextView) findViewById(R.id.tv_channel)).setText(LoadJni.listenUnInstall());
         ((TextView) findViewById(R.id.tv_channel)).setOnClickListener(new View.OnClickListener() {
